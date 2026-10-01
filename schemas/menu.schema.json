@@ -1,0 +1,483 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"$id": "https://amxts.github.io/schemas/menu.schema.json",
+	"title": "Menu Core menu file",
+	"description": "A menu file of @amxts/menu-core: chatPrefix, labels and menus.",
+	"properties": {
+		"chatPrefix": {
+			"markdownDescription": "The chat prefix of Menu Core's messages (the \"nothing to list\" message). INI: `[MAIN]` `PREFIX`.",
+			"description": "The chat prefix of Menu Core's messages (the \"nothing to list\" message). INI: [MAIN] PREFIX."
+		},
+		"labels": {
+			"markdownDescription": "The words of the buttons, the page and the countdown. INI: `[MAIN]` `KEY = { ... }`.",
+			"description": "The words of the buttons, the page and the countdown. INI: [MAIN] KEY = { ... }.",
+			"$ref": "#/definitions/labels"
+		},
+		"menus": {
+			"markdownDescription": "The menus: `{ NAME: menu }`; a name starting with `LIST_` is a list menu. INI: a `[NAME]` section each.",
+			"description": "The menus: { NAME: menu }; a name starting with LIST_ is a list menu. INI: a [NAME] section each.",
+			"$ref": "#/definitions/menus"
+		}
+	},
+	"definitions": {
+		"labels": {
+			"properties": {
+				"exit": {
+					"markdownDescription": "The exit button. A lang key or the text itself.",
+					"description": "The exit button. A lang key or the text itself."
+				},
+				"back": {
+					"markdownDescription": "The back button. A lang key or the text itself.",
+					"description": "The back button. A lang key or the text itself."
+				},
+				"next": {
+					"markdownDescription": "The next page button. A lang key or the text itself.",
+					"description": "The next page button. A lang key or the text itself."
+				},
+				"number": {
+					"markdownDescription": "The number before an item: `!y[%d]!w` unless the dictionary says otherwise.",
+					"description": "The number before an item: !y[%d]!w unless the dictionary says otherwise."
+				},
+				"disabled": {
+					"markdownDescription": "The number before a greyed-out item.",
+					"description": "The number before a greyed-out item."
+				},
+				"page": {
+					"markdownDescription": "The page counter. A lang key or the text itself.",
+					"description": "The page counter. A lang key or the text itself."
+				},
+				"time": {
+					"markdownDescription": "The countdown. A lang key or the text itself.",
+					"description": "The countdown. A lang key or the text itself."
+				}
+			}
+		},
+		"menu": {
+			"properties": {
+				"title": {
+					"markdownDescription": "The title; a menu has one. A lang key or the text itself. INI: `TITLE`.",
+					"description": "The title; a menu has one. A lang key or the text itself. INI: TITLE."
+				},
+				"activeOn": {
+					"markdownDescription": "Conditions the menu opens only under. INI: `ACTIVE_ON`.",
+					"description": "Conditions the menu opens only under. INI: ACTIVE_ON."
+				},
+				"hideBack": {
+					"markdownDescription": "`true` leaves the back button out. INI: `HIDE_BACK`.",
+					"description": "true leaves the back button out. INI: HIDE_BACK.",
+					"examples": [
+						true,
+						false
+					]
+				},
+				"hideExit": {
+					"markdownDescription": "`true` leaves the exit button out. INI: `HIDE_EXIT`.",
+					"description": "true leaves the exit button out. INI: HIDE_EXIT.",
+					"examples": [
+						true,
+						false
+					]
+				},
+				"locked": {
+					"markdownDescription": "Items cannot be chosen, and the menu cannot be closed or replaced. INI: `LOCKED`.",
+					"description": "Items cannot be chosen, and the menu cannot be closed or replaced. INI: LOCKED.",
+					"examples": [
+						true,
+						false
+					]
+				},
+				"sharedTimer": {
+					"markdownDescription": "One countdown for everyone who looks at the menu. INI: `GLOBAL`.",
+					"description": "One countdown for everyone who looks at the menu. INI: GLOBAL.",
+					"examples": [
+						true,
+						false
+					]
+				},
+				"time": {
+					"markdownDescription": "A countdown in seconds. INI: `TIME`.",
+					"description": "A countdown in seconds. INI: TIME.",
+					"examples": [
+						0,
+						1
+					]
+				},
+				"onTimeout": {
+					"markdownDescription": "Actions run when the countdown ends. INI: `ON_TIMEOUT`.",
+					"description": "Actions run when the countdown ends. INI: ON_TIMEOUT."
+				},
+				"items": {
+					"markdownDescription": "An items menu's items. INI: `ITEMS`.",
+					"description": "An items menu's items. INI: ITEMS.",
+					"items": {
+						"$ref": "#/definitions/item"
+					},
+					"defaultSnippets": [
+						{
+							"body": [
+								{}
+							]
+						}
+					]
+				},
+				"fixedItems": {
+					"markdownDescription": "Items that keep their `slot`, 1-7, on every page. INI: `FIXED_ITEMS`.",
+					"description": "Items that keep their slot, 1-7, on every page. INI: FIXED_ITEMS.",
+					"items": {
+						"$ref": "#/definitions/fixed"
+					},
+					"defaultSnippets": [
+						{
+							"body": [
+								{}
+							]
+						}
+					]
+				},
+				"filters": {
+					"markdownDescription": "A list menu's filters: rows the `when` of one does not hold for are left out. INI: `FILTER`.",
+					"description": "A list menu's filters: rows the when of one does not hold for are left out. INI: FILTER.",
+					"items": {
+						"$ref": "#/definitions/filter"
+					},
+					"defaultSnippets": [
+						{
+							"body": [
+								{}
+							]
+						}
+					]
+				},
+				"view": {
+					"markdownDescription": "A list menu's row, drawn per player or per row of its list source. INI: `VIEW`.",
+					"description": "A list menu's row, drawn per player or per row of its list source. INI: VIEW.",
+					"$ref": "#/definitions/view"
+				}
+			}
+		},
+		"item": {
+			"properties": {
+				"name": {
+					"markdownDescription": "The item's text. A lang key or the text itself.",
+					"description": "The item's text. A lang key or the text itself."
+				},
+				"placeholder": {
+					"markdownDescription": "Text after the name, e.g. `%hp%`.",
+					"description": "Text after the name, e.g. %hp%."
+				},
+				"action": {
+					"markdownDescription": "Actions run when the item is chosen: registered ones, `SHOW_<MENU>`, `CLOSE_MENU`.",
+					"description": "Actions run when the item is chosen: registered ones, SHOW_<MENU>, CLOSE_MENU."
+				},
+				"visible": {
+					"markdownDescription": "Whether the item is shown at all: while its names do not hold, it is left out and takes no slot (a fixed item leaves its slot blank). One name, several space-separated (all must hold), or a list of them; `!NAME` turns one around; `NAME:param` hands the test a parameter and takes the rest of the line, so it goes last. A name is a restriction or a condition. INI has nothing that hides an item.",
+					"description": "Whether the item is shown at all: while its names do not hold, it is left out and takes no slot (a fixed item leaves its slot blank). One name, several space-separated (all must hold), or a list of them; !NAME turns one around; NAME:param hands the test a parameter and takes the rest of the line, so it goes last. A name is a restriction or a condition. INI has nothing that hides an item.",
+					"anyOf": [
+						{
+							"type": "string"
+						},
+						{
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
+						}
+					]
+				},
+				"enabled": {
+					"markdownDescription": "Whether the item can be chosen: while not, it is greyed out with `message` beside it. A line of names - one, several space-separated (all must hold), `!NAME` turns one around, `NAME:param` hands the test a parameter and goes last - or a list of requirements, each a line of names or `{ when, message }` with a message of its own; the first that fails gives its message. A name is a restriction or a condition. INI: the condition column greys an item out without a message, the restriction column with the message column.",
+					"description": "Whether the item can be chosen: while not, it is greyed out with message beside it. A line of names - one, several space-separated (all must hold), !NAME turns one around, NAME:param hands the test a parameter and goes last - or a list of requirements, each a line of names or { when, message } with a message of its own; the first that fails gives its message. A name is a restriction or a condition. INI: the condition column greys an item out without a message, the restriction column with the message column.",
+					"anyOf": [
+						{
+							"type": "string"
+						},
+						{
+							"type": "array",
+							"items": {
+								"anyOf": [
+									{
+										"type": "string"
+									},
+									{
+										"$ref": "#/definitions/requirement"
+									}
+								]
+							}
+						}
+					]
+				},
+				"message": {
+					"markdownDescription": "Beside the item while `enabled` greys it out, in place of the restriction's own message; a requirement's own `message` goes in place of this one.",
+					"description": "Beside the item while enabled greys it out, in place of the restriction's own message; a requirement's own message goes in place of this one."
+				},
+				"spaceBefore": {
+					"markdownDescription": "Blank lines before the item.",
+					"description": "Blank lines before the item.",
+					"examples": [
+						0,
+						1
+					]
+				},
+				"spaceAfter": {
+					"markdownDescription": "Blank lines after the item.",
+					"description": "Blank lines after the item.",
+					"examples": [
+						0,
+						1
+					]
+				},
+				"variants": {
+					"markdownDescription": "Several faces of the item: the first variant whose `when` holds is shown; when none does, the first, greyed out. INI: `A|B` in the name, condition and action columns.",
+					"description": "Several faces of the item: the first variant whose when holds is shown; when none does, the first, greyed out. INI: A|B in the name, condition and action columns.",
+					"items": {
+						"$ref": "#/definitions/variant"
+					},
+					"defaultSnippets": [
+						{
+							"body": [
+								{}
+							]
+						}
+					]
+				}
+			}
+		},
+		"fixed": {
+			"properties": {
+				"slot": {
+					"markdownDescription": "The item's key, 1 to 7.",
+					"description": "The item's key, 1 to 7.",
+					"examples": [
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7
+					]
+				},
+				"name": {
+					"markdownDescription": "The item's text. A lang key or the text itself.",
+					"description": "The item's text. A lang key or the text itself."
+				},
+				"placeholder": {
+					"markdownDescription": "Text after the name, e.g. `%hp%`.",
+					"description": "Text after the name, e.g. %hp%."
+				},
+				"action": {
+					"markdownDescription": "Actions run when the item is chosen: registered ones, `SHOW_<MENU>`, `CLOSE_MENU`.",
+					"description": "Actions run when the item is chosen: registered ones, SHOW_<MENU>, CLOSE_MENU."
+				},
+				"visible": {
+					"markdownDescription": "Whether the item is shown at all: while its names do not hold, it is left out and takes no slot (a fixed item leaves its slot blank). One name, several space-separated (all must hold), or a list of them; `!NAME` turns one around; `NAME:param` hands the test a parameter and takes the rest of the line, so it goes last. A name is a restriction or a condition. INI has nothing that hides an item.",
+					"description": "Whether the item is shown at all: while its names do not hold, it is left out and takes no slot (a fixed item leaves its slot blank). One name, several space-separated (all must hold), or a list of them; !NAME turns one around; NAME:param hands the test a parameter and takes the rest of the line, so it goes last. A name is a restriction or a condition. INI has nothing that hides an item.",
+					"anyOf": [
+						{
+							"type": "string"
+						},
+						{
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
+						}
+					]
+				},
+				"enabled": {
+					"markdownDescription": "Whether the item can be chosen: while not, it is greyed out with `message` beside it. A line of names - one, several space-separated (all must hold), `!NAME` turns one around, `NAME:param` hands the test a parameter and goes last - or a list of requirements, each a line of names or `{ when, message }` with a message of its own; the first that fails gives its message. A name is a restriction or a condition. INI: the condition column greys an item out without a message, the restriction column with the message column.",
+					"description": "Whether the item can be chosen: while not, it is greyed out with message beside it. A line of names - one, several space-separated (all must hold), !NAME turns one around, NAME:param hands the test a parameter and goes last - or a list of requirements, each a line of names or { when, message } with a message of its own; the first that fails gives its message. A name is a restriction or a condition. INI: the condition column greys an item out without a message, the restriction column with the message column.",
+					"anyOf": [
+						{
+							"type": "string"
+						},
+						{
+							"type": "array",
+							"items": {
+								"anyOf": [
+									{
+										"type": "string"
+									},
+									{
+										"$ref": "#/definitions/requirement"
+									}
+								]
+							}
+						}
+					]
+				},
+				"message": {
+					"markdownDescription": "Beside the item while `enabled` greys it out, in place of the restriction's own message; a requirement's own `message` goes in place of this one.",
+					"description": "Beside the item while enabled greys it out, in place of the restriction's own message; a requirement's own message goes in place of this one."
+				},
+				"spaceBefore": {
+					"markdownDescription": "Blank lines before the item.",
+					"description": "Blank lines before the item.",
+					"examples": [
+						0,
+						1
+					]
+				},
+				"spaceAfter": {
+					"markdownDescription": "Blank lines after the item.",
+					"description": "Blank lines after the item.",
+					"examples": [
+						0,
+						1
+					]
+				},
+				"variants": {
+					"markdownDescription": "Several faces of the item: the first variant whose `when` holds is shown; when none does, the first, greyed out. INI: `A|B` in the name, condition and action columns.",
+					"description": "Several faces of the item: the first variant whose when holds is shown; when none does, the first, greyed out. INI: A|B in the name, condition and action columns.",
+					"items": {
+						"$ref": "#/definitions/variant"
+					},
+					"defaultSnippets": [
+						{
+							"body": [
+								{}
+							]
+						}
+					]
+				}
+			}
+		},
+		"view": {
+			"properties": {
+				"name": {
+					"markdownDescription": "The item's text. A lang key or the text itself.",
+					"description": "The item's text. A lang key or the text itself."
+				},
+				"action": {
+					"markdownDescription": "Actions run when the item is chosen: registered ones, `SHOW_<MENU>`, `CLOSE_MENU`.",
+					"description": "Actions run when the item is chosen: registered ones, SHOW_<MENU>, CLOSE_MENU."
+				},
+				"enabled": {
+					"markdownDescription": "Whether the item can be chosen: while not, it is greyed out with `message` beside it. A line of names - one, several space-separated (all must hold), `!NAME` turns one around, `NAME:param` hands the test a parameter and goes last - or a list of requirements, each a line of names or `{ when, message }` with a message of its own; the first that fails gives its message. A name is a restriction or a condition. INI: the condition column greys an item out without a message, the restriction column with the message column.",
+					"description": "Whether the item can be chosen: while not, it is greyed out with message beside it. A line of names - one, several space-separated (all must hold), !NAME turns one around, NAME:param hands the test a parameter and goes last - or a list of requirements, each a line of names or { when, message } with a message of its own; the first that fails gives its message. A name is a restriction or a condition. INI: the condition column greys an item out without a message, the restriction column with the message column.",
+					"anyOf": [
+						{
+							"type": "string"
+						},
+						{
+							"type": "array",
+							"items": {
+								"anyOf": [
+									{
+										"type": "string"
+									},
+									{
+										"$ref": "#/definitions/requirement"
+									}
+								]
+							}
+						}
+					]
+				},
+				"message": {
+					"markdownDescription": "Beside the item while `enabled` greys it out, in place of the restriction's own message; a requirement's own `message` goes in place of this one.",
+					"description": "Beside the item while enabled greys it out, in place of the restriction's own message; a requirement's own message goes in place of this one."
+				},
+				"variants": {
+					"markdownDescription": "Several faces of the item: the first variant whose `when` holds is shown; when none does, the first, greyed out. INI: `A|B` in the name, condition and action columns.",
+					"description": "Several faces of the item: the first variant whose when holds is shown; when none does, the first, greyed out. INI: A|B in the name, condition and action columns.",
+					"items": {
+						"$ref": "#/definitions/variant"
+					},
+					"defaultSnippets": [
+						{
+							"body": [
+								{}
+							]
+						}
+					]
+				}
+			}
+		},
+		"variant": {
+			"properties": {
+				"name": {
+					"markdownDescription": "The variant's text. A lang key or the text itself.",
+					"description": "The variant's text. A lang key or the text itself."
+				},
+				"when": {
+					"markdownDescription": "The names the variant is shown under: the first variant whose `when` holds is shown; one without `when` always holds. One name, several space-separated (all must hold), or a list of them; `!NAME` turns one around; `NAME:param` hands the test a parameter and takes the rest of the line, so it goes last. A name is a restriction or a condition.",
+					"description": "The names the variant is shown under: the first variant whose when holds is shown; one without when always holds. One name, several space-separated (all must hold), or a list of them; !NAME turns one around; NAME:param hands the test a parameter and takes the rest of the line, so it goes last. A name is a restriction or a condition.",
+					"anyOf": [
+						{
+							"type": "string"
+						},
+						{
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
+						}
+					]
+				},
+				"action": {
+					"markdownDescription": "Actions run when the variant is chosen.",
+					"description": "Actions run when the variant is chosen."
+				}
+			}
+		},
+		"requirement": {
+			"type": "object",
+			"properties": {
+				"when": {
+					"markdownDescription": "The names that must hold for the item to be chosen. One name, several space-separated (all must hold), or a list of them; `!NAME` turns one around; `NAME:param` hands the test a parameter and takes the rest of the line, so it goes last. A name is a restriction or a condition.",
+					"description": "The names that must hold for the item to be chosen. One name, several space-separated (all must hold), or a list of them; !NAME turns one around; NAME:param hands the test a parameter and takes the rest of the line, so it goes last. A name is a restriction or a condition.",
+					"anyOf": [
+						{
+							"type": "string"
+						},
+						{
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
+						}
+					]
+				},
+				"message": {
+					"markdownDescription": "Beside the item while these names do not hold - instead of the item's `message`.",
+					"description": "Beside the item while these names do not hold - instead of the item's message.",
+					"type": "string"
+				}
+			},
+			"required": [
+				"when"
+			],
+			"additionalProperties": false
+		},
+		"filter": {
+			"properties": {
+				"when": {
+					"markdownDescription": "Rows the names do not hold for are left out. One name, several space-separated (all must hold), or a list of them; `!NAME` turns one around; `NAME:param` hands the test a parameter and takes the rest of the line, so it goes last. A name is a restriction or a condition.",
+					"description": "Rows the names do not hold for are left out. One name, several space-separated (all must hold), or a list of them; !NAME turns one around; NAME:param hands the test a parameter and takes the rest of the line, so it goes last. A name is a restriction or a condition.",
+					"anyOf": [
+						{
+							"type": "string"
+						},
+						{
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
+						}
+					]
+				},
+				"message": {
+					"markdownDescription": "Said when no row is left.",
+					"description": "Said when no row is left."
+				}
+			}
+		},
+		"menus": {
+			"markdownDescription": "The menus: `{ NAME: menu }`; a name starting with `LIST_` is a list menu.",
+			"additionalProperties": {
+				"$ref": "#/definitions/menu"
+			}
+		}
+	}
+}

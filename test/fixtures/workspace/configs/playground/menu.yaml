@@ -1,0 +1,59 @@
+# The menus of menu.ini, written in YAML: the same menus, named fields.
+
+chatPrefix: MY_CHAT_PREFIX
+labels:
+  exit: MY_MENU_EXIT
+  number: MY_MENU_NUMBER
+  disabled: MY_MENU_NUMBER_DISABLED
+
+menus:
+  MAIN_MENU:
+    title: MY_MENU_MAIN_TITLE
+    hideBack: true
+    items:
+      - name: MY_MENU_RESET_SCORE
+        action: RESET_SCORE
+      - name: MY_MENU_ADMIN
+        action: SHOW_ADMIN_MENU
+        enabled: [IS_ADMIN, FLAG_d]
+      - name: MY_MENU_SETTINGS
+        action: SHOW_SETTINGS_MENU
+        spaceAfter: 1
+      # The first variant whose "when" holds is shown.
+      - variants:
+          - name: MY_MENU_SPECTATE
+            when: "!IS_SPECTATOR"
+            action: JOIN_SPECTATE
+          - name: MY_MENU_JOIN
+            when: IS_SPECTATOR
+            action: JOIN_TEAM
+
+  ADMIN_MENU:
+    title: MY_MENU_ADMIN_TITLE
+    activeOn: IS_ADMIN
+    items:
+      - { name: MY_MENU_DM_MODE, placeholder: "%dm_status%", action: TOGGLE_DM, enabled: FLAG_d }
+      - { name: MY_MENU_SOLO_MODE, placeholder: "%solo_status%", action: TOGGLE_SOLO, enabled: FLAG_d }
+
+  SETTINGS_MENU:
+    title: MY_MENU_SETTINGS_TITLE
+    items:
+      - name: MY_MENU_HIDE_KNIFE
+        action: TOGGLE_HIDE_KNIFE
+      - name: MY_MENU_FOV
+        action: INPUT_FOV
+
+  LIST_SPECTATORS:
+    title: MY_MENU_SPECTATORS_TITLE
+    filters:
+      - when: IS_SPECTATOR
+        message: MY_CHAT_NO_SPECTATORS
+    view:
+      name: "%name%"
+      action: SWAP
+
+  LIST_PLAYERS:
+    title: MY_MENU_PLAYERS_TITLE
+    view:
+      name: "%name%"
+      action: PLAYER_ACTION

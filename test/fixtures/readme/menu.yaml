@@ -1,0 +1,35 @@
+# configs/menu.yaml
+chatPrefix: MYPLUGIN_CHAT_PREFIX   # chat prefix of the "nothing to list" message
+labels:
+  exit: MYPLUGIN_MENU_EXIT         # the buttons: a lang key or the text itself
+  number: MYPLUGIN_MENU_NUMBER     # "!y[%d]!w" unless the dictionary says otherwise
+
+menus:
+  MAIN_MENU:
+    title: MYPLUGIN_MENU_MAIN_TITLE
+    hideBack: true
+    items:
+      - name: MYPLUGIN_MENU_MAIN_ADMIN
+        visible: IS_ADMIN                  # left out for everyone else
+        enabled: FLAG_d                    # greyed out, the message beside it
+        message: MYPLUGIN_MENU_NEEDS_FLAG_D
+        action: SHOW_ADMIN_MENU
+      - name: MYPLUGIN_MENU_MAIN_AWP
+        enabled:                           # the first that fails gives its message
+          - when: VIP
+            message: MYPLUGIN_MENU_VIP_ONLY
+          - when: LEVEL:5
+            message: MYPLUGIN_MENU_LEVEL_5
+        action: BUY_AWP
+      - variants:                          # the first whose "when" holds is shown
+          - { name: MYPLUGIN_MENU_MAIN_SPECTATE, when: "!IS_SPECTATOR", action: JOIN_SPECTATE }
+          - { name: MYPLUGIN_MENU_MAIN_JOIN, when: IS_SPECTATOR, action: JOIN_TEAM }
+
+  LIST_SPECTATORS_MENU:
+    title: MYPLUGIN_MENU_SPECTATORS_TITLE
+    activeOn: IS_ROUND_RUNNING
+    filters:
+      - { when: IS_SPECTATOR, message: MYPLUGIN_CHAT_NO_SPECTATORS }
+    view:
+      name: "%name%"
+      action: SWAP_WITH_SPECTATOR

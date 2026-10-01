@@ -1,0 +1,9 @@
+**
+!dist/extension.js
+!schemas/**
+!images/icon.png
+!package.json
+!README.md
+!README.ru.md
+!LICENSE
+!CHANGELOG.md

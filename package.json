@@ -1,0 +1,142 @@
+{
+	"name": "amxts-vscode",
+	"displayName": "amxts",
+	"description": "Editor support for amxts: live hints and checks for the official modules' files - Menu Core menus and Config Core configs - from the names and shapes your plugins declare.",
+	"icon": "images/icon.png",
+	"galleryBanner": {
+		"color": "#15181D",
+		"theme": "dark"
+	},
+	"version": "0.1.0",
+	"publisher": "amxts",
+	"license": "MIT",
+	"author": {
+		"name": "kukson777",
+		"url": "https://github.com/kukson777"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/amxts/amxts-vscode.git"
+	},
+	"engines": {
+		"vscode": "^1.90.0"
+	},
+	"categories": [
+		"Programming Languages",
+		"Linters"
+	],
+	"keywords": [
+		"amxts",
+		"amxmodx",
+		"menu-core",
+		"config-core",
+		"counter-strike"
+	],
+	"main": "./dist/extension.js",
+	"activationEvents": [
+		"onLanguage:ini",
+		"onLanguage:yaml",
+		"onLanguage:json",
+		"onLanguage:jsonc",
+		"workspaceContains:amxts.config.ts"
+	],
+	"contributes": {
+		"commands": [
+			{
+				"command": "amxts.reindex",
+				"title": "Re-read the names the workspace registers",
+				"category": "amxts"
+			}
+		],
+		"configuration": {
+			"title": "amxts",
+			"properties": {
+				"amxts.menus.files": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					},
+					"default": [],
+					"markdownDescription": "More menu files, besides the one `amxts.config.ts` names (`menus.file`, `menus.fallback`): each a name as `menus.file` takes it (`myserver/menu` - any `.ini`, `.yaml`, `.yml`, `.json` or `.jsonc` whose path ends with it) or a file name with its extension (`shop.yaml`)."
+				},
+				"amxts.menus.detectByContent": {
+					"type": "boolean",
+					"default": true,
+					"markdownDescription": "Also treat a file as a menu file when its content looks like one: an INI `[SECTION]` with `TITLE` and `ITEMS` or `VIEW`, a YAML or JSON file with a top-level `menus` key."
+				},
+				"amxts.index.excludeFolders": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					},
+					"default": [
+						".git",
+						"node_modules",
+						"dist",
+						".amxts",
+						"test",
+						"tests"
+					],
+					"markdownDescription": "Folder names skipped when the workspace is searched for registrations (`.ts`, `.sma`). The sources of installed modules - `node_modules/@amxts/*/src` - are read anyway. Test folders are skipped because tests register names of their own."
+				},
+				"amxts.diagnostics.unknownNames": {
+					"type": "boolean",
+					"default": true,
+					"markdownDescription": "Warn of a condition, action, restriction or placeholder that nothing in the workspace registers. A Pawn plugin on the server that is not in the workspace may still register it."
+				}
+			}
+		},
+		"jsonValidation": [
+			{
+				"fileMatch": [
+					"menu.json",
+					"menu.jsonc"
+				],
+				"url": "./schemas/menu.schema.json"
+			}
+		],
+		"yamlValidation": [
+			{
+				"fileMatch": [
+					"menu.yaml",
+					"menu.yml"
+				],
+				"url": "./schemas/menu.schema.json"
+			}
+		]
+	},
+	"scripts": {
+		"build": "node esbuild.mjs",
+		"watch": "node esbuild.mjs --watch",
+		"schema": "bun scripts/schema.ts",
+		"vendor": "bun scripts/vendor.ts",
+		"typecheck": "tsc --noEmit",
+		"test": "node esbuild.mjs && bun test",
+		"package": "vsce package --no-rewrite-relative-links",
+		"vscode:prepublish": "node esbuild.mjs",
+		"lint": "oxlint && oxfmt --check",
+		"lint:fix": "oxfmt && oxlint --fix --silent || oxlint --fix --silent || oxlint --fix"
+	},
+	"dependencies": {
+		"jsonc-parser": "^3.3.1",
+		"typescript": "~6.0.3",
+		"yaml": "^2.9.1"
+	},
+	"devDependencies": {
+		"@e18e/eslint-plugin": "^0.8.1",
+		"@eslint-community/eslint-plugin-eslint-comments": "^4.8.1",
+		"@stylistic/eslint-plugin": "^5.10.0",
+		"@types/bun": "^1.2.0",
+		"@types/node": "^20.0.0",
+		"@types/vscode": "~1.90.0",
+		"@vscode/vsce": "^3.0.0",
+		"esbuild": "^0.28.2",
+		"eslint-plugin-antfu": "^3.2.3",
+		"eslint-plugin-command": "^4.0.0",
+		"eslint-plugin-n": "^18.4.0",
+		"eslint-plugin-perfectionist": "^5.12.1",
+		"eslint-plugin-regexp": "^3.3.1",
+		"oxfmt": "^0.70.0",
+		"oxlint": "^1.85.0"
+	}
+}

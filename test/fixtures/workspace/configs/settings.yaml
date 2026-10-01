@@ -1,0 +1,11 @@
+# What the settings plugin reads.
+chat:
+  prefix: "[HNS]"
+  enabled: true
+round:
+  time: 2.5
+  mode: normal
+maps: [de_dust2, de_inferno]
+prices:
+  armor: 10
+motd: Welcome!
