@@ -1,0 +1,21 @@
+# A release of amxts-vscode: on its tag v<version>, its GitHub Release with
+# the version's section of CHANGELOG.md as the notes (amxts/amxts's
+# release-notes.yml). Run by hand with the tag, it replaces the notes.
+name: Publish
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: The release's tag, v<version>
+        required: true
+
+jobs:
+  notes:
+    permissions:
+      contents: write
+    uses: amxts/amxts/.github/workflows/release-notes.yml@main
+    with:
+      tag: ${{ inputs.tag || github.ref_name }}
